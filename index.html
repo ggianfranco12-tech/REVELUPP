@@ -208,8 +208,8 @@ label{
   </div>
 
   <div class="card">
-    <h2 id="totalCategories">0</h2>
-    <p>Categorías</p>
+    <h2 id="totalProcedures">0</h2>
+    <p>Procedimientos</p>
   </div>
 
 </div>
@@ -247,12 +247,8 @@ label{
 
   <br><br>
 
-  <label>Categoría</label>
-  <input id="fCategory">
-
-  <br><br>
-
   <label>Tipo</label>
+
   <select id="fType">
     <option value="procedimiento">Procedimiento</option>
     <option value="tip">Tip / Truco</option>
@@ -301,7 +297,8 @@ let entries = [];
 
 function toggleForm(){
 
-  const box = document.getElementById("formBox");
+  const box =
+    document.getElementById("formBox");
 
   box.classList.toggle("hidden");
 
@@ -309,9 +306,11 @@ function toggleForm(){
 
 function toggleSolution(){
 
-  const type = document.getElementById("fType").value;
+  const type =
+    document.getElementById("fType").value;
 
-  const solBox = document.getElementById("solBox");
+  const solBox =
+    document.getElementById("solBox");
 
   if(type === "incidencia"){
 
@@ -334,22 +333,27 @@ document
 function saveEntry(){
 
   const id =
-    document.getElementById("editId").value || Date.now();
+    document.getElementById("editId").value
+    || Date.now();
 
   const title =
-    document.getElementById("fTitle").value.trim();
-
-  const category =
-    document.getElementById("fCategory").value.trim();
+    document.getElementById("fTitle")
+    .value
+    .trim();
 
   const type =
-    document.getElementById("fType").value;
+    document.getElementById("fType")
+    .value;
 
   const desc =
-    document.getElementById("fDesc").value.trim();
+    document.getElementById("fDesc")
+    .value
+    .trim();
 
   const sol =
-    document.getElementById("fSol").value.trim();
+    document.getElementById("fSol")
+    .value
+    .trim();
 
   const tags =
     document.getElementById("fTags")
@@ -358,7 +362,7 @@ function saveEntry(){
     .map(t => t.trim())
     .filter(Boolean);
 
-  if(!title || !category || !desc){
+  if(!title || !desc){
 
     alert("Completa los campos");
 
@@ -372,7 +376,6 @@ function saveEntry(){
   if(existing){
 
     existing.title = title;
-    existing.category = category;
     existing.type = type;
     existing.desc = desc;
     existing.sol = sol;
@@ -383,7 +386,6 @@ function saveEntry(){
     entries.unshift({
       id,
       title,
-      category,
       type,
       desc,
       sol,
@@ -406,7 +408,6 @@ function clearForm(){
 
   document.getElementById("editId").value = "";
   document.getElementById("fTitle").value = "";
-  document.getElementById("fCategory").value = "";
   document.getElementById("fType").value = "procedimiento";
   document.getElementById("fDesc").value = "";
   document.getElementById("fSol").value = "";
@@ -418,13 +419,13 @@ function clearForm(){
 
 function editEntry(id){
 
-  const e = entries.find(x => x.id == id);
+  const e =
+    entries.find(x => x.id == id);
 
   if(!e) return;
 
   document.getElementById("editId").value = e.id;
   document.getElementById("fTitle").value = e.title;
-  document.getElementById("fCategory").value = e.category;
   document.getElementById("fType").value = e.type;
   document.getElementById("fDesc").value = e.desc;
   document.getElementById("fSol").value = e.sol;
@@ -466,17 +467,26 @@ function render(){
     entries.filter(e => {
 
       const match =
-        e.title.toLowerCase().includes(q) ||
-        e.category.toLowerCase().includes(q) ||
-        e.desc.toLowerCase().includes(q) ||
-        e.tags.join(" ").toLowerCase().includes(q);
+
+        e.title.toLowerCase().includes(q)
+
+        ||
+
+        e.desc.toLowerCase().includes(q)
+
+        ||
+
+        e.tags.join(" ")
+        .toLowerCase()
+        .includes(q);
 
       return match &&
-        (!filter || e.type === filter);
+      (!filter || e.type === filter);
 
     });
 
   document.getElementById("results").innerHTML =
+
     filtered.map(e => `
 
       <div class="result">
@@ -484,32 +494,51 @@ function render(){
         <h3>${e.title}</h3>
 
         <div>
-          <span class="tag">${e.category}</span>
-          <span class="tag">${e.type}</span>
+
+          <span class="tag">
+            ${e.type}
+          </span>
+
         </div>
 
         <p>${e.desc}</p>
 
         ${
-          e.type === "incidencia" && e.sol
+          e.type === "incidencia"
+          &&
+          e.sol
+
           ?
+
           `
           <div class="solution">
+
             <strong>Solución:</strong>
+
             <br><br>
+
             ${e.sol}
+
           </div>
           `
+
           :
+
           ""
         }
 
         <div style="margin-top:12px;">
+
           ${
-            e.tags.map(t =>
-              `<span class="tag">#${t}</span>`
-            ).join("")
+            e.tags
+            .map(t => `
+              <span class="tag">
+                #${t}
+              </span>
+            `)
+            .join("")
           }
+
         </div>
 
         <div class="actions">
@@ -540,18 +569,21 @@ function render(){
 
 function updateStats(){
 
-  document.getElementById("totalEntries").innerText =
+  document.getElementById("totalEntries")
+  .innerText =
     entries.length;
 
-  document.getElementById("totalIncidents").innerText =
-    entries.filter(e =>
-      e.type === "incidencia"
+  document.getElementById("totalIncidents")
+  .innerText =
+    entries.filter(
+      e => e.type === "incidencia"
     ).length;
 
-  document.getElementById("totalCategories").innerText =
-    [...new Set(
-      entries.map(e => e.category)
-    )].length;
+  document.getElementById("totalProcedures")
+  .innerText =
+    entries.filter(
+      e => e.type === "procedimiento"
+    ).length;
 
 }
 
