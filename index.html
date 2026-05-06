@@ -193,7 +193,10 @@ label{
 <div class="container">
 
 <h1>REVELUP</h1>
-<p class="subtitle">Base de conocimiento inteligente</p>
+
+<p class="subtitle">
+  Base de conocimiento inteligente
+</p>
 
 <div class="stats">
 
@@ -218,17 +221,39 @@ label{
 
   <div class="topbar">
 
-    <input id="search" placeholder="Buscar...">
+    <input
+      id="search"
+      placeholder="Buscar..."
+    >
 
     <select id="filterType">
-      <option value="">Todos los tipos</option>
-      <option value="procedimiento">Procedimiento</option>
-      <option value="tip">Tip / Truco</option>
-      <option value="documentacion">Documentación</option>
-      <option value="incidencia">Incidencia</option>
+
+      <option value="">
+        Todos los tipos
+      </option>
+
+      <option value="procedimiento">
+        Procedimiento
+      </option>
+
+      <option value="tip">
+        Tip / Truco
+      </option>
+
+      <option value="documentacion">
+        Documentación
+      </option>
+
+      <option value="incidencia">
+        Incidencia
+      </option>
+
     </select>
 
-    <button class="btn-primary" onclick="toggleForm()">
+    <button
+      class="btn-primary"
+      onclick="toggleForm()"
+    >
       + Nueva entrada
     </button>
 
@@ -236,13 +261,20 @@ label{
 
 </div>
 
-<div id="formBox" class="box hidden">
+<div
+  id="formBox"
+  class="box hidden"
+>
 
   <h2>Nueva entrada</h2>
 
-  <input type="hidden" id="editId">
+  <input
+    type="hidden"
+    id="editId"
+  >
 
   <label>Título</label>
+
   <input id="fTitle">
 
   <br><br>
@@ -250,15 +282,29 @@ label{
   <label>Tipo</label>
 
   <select id="fType">
-    <option value="procedimiento">Procedimiento</option>
-    <option value="tip">Tip / Truco</option>
-    <option value="documentacion">Documentación</option>
-    <option value="incidencia">Incidencia</option>
+
+    <option value="procedimiento">
+      Procedimiento
+    </option>
+
+    <option value="tip">
+      Tip / Truco
+    </option>
+
+    <option value="documentacion">
+      Documentación
+    </option>
+
+    <option value="incidencia">
+      Incidencia
+    </option>
+
   </select>
 
   <br><br>
 
   <label>Descripción</label>
+
   <textarea id="fDesc"></textarea>
 
   <br><br>
@@ -266,6 +312,7 @@ label{
   <div id="solBox" class="hidden">
 
     <label>Solución</label>
+
     <textarea id="fSol"></textarea>
 
     <br><br>
@@ -273,15 +320,25 @@ label{
   </div>
 
   <label>Tags</label>
-  <input id="fTags" placeholder="factura, error, cliente">
+
+  <input
+    id="fTags"
+    placeholder="factura, error, cliente"
+  >
 
   <br><br>
 
-  <button class="btn-primary" onclick="saveEntry()">
+  <button
+    class="btn-primary"
+    onclick="saveEntry()"
+  >
     Guardar
   </button>
 
-  <button class="btn-secondary" onclick="toggleForm()">
+  <button
+    class="btn-secondary"
+    onclick="toggleForm()"
+  >
     Cancelar
   </button>
 
@@ -293,7 +350,10 @@ label{
 
 <script>
 
-let entries = [];
+let entries =
+  JSON.parse(
+    localStorage.getItem("revelup_db")
+  ) || [];
 
 function toggleForm(){
 
@@ -394,6 +454,11 @@ function saveEntry(){
 
   }
 
+  localStorage.setItem(
+    "revelup_db",
+    JSON.stringify(entries)
+  );
+
   clearForm();
 
   document
@@ -407,10 +472,16 @@ function saveEntry(){
 function clearForm(){
 
   document.getElementById("editId").value = "";
+
   document.getElementById("fTitle").value = "";
-  document.getElementById("fType").value = "procedimiento";
+
+  document.getElementById("fType").value =
+    "procedimiento";
+
   document.getElementById("fDesc").value = "";
+
   document.getElementById("fSol").value = "";
+
   document.getElementById("fTags").value = "";
 
   toggleSolution();
@@ -424,12 +495,23 @@ function editEntry(id){
 
   if(!e) return;
 
-  document.getElementById("editId").value = e.id;
-  document.getElementById("fTitle").value = e.title;
-  document.getElementById("fType").value = e.type;
-  document.getElementById("fDesc").value = e.desc;
-  document.getElementById("fSol").value = e.sol;
-  document.getElementById("fTags").value = e.tags.join(", ");
+  document.getElementById("editId").value =
+    e.id;
+
+  document.getElementById("fTitle").value =
+    e.title;
+
+  document.getElementById("fType").value =
+    e.type;
+
+  document.getElementById("fDesc").value =
+    e.desc;
+
+  document.getElementById("fSol").value =
+    e.sol;
+
+  document.getElementById("fTags").value =
+    e.tags.join(", ");
 
   toggleSolution();
 
@@ -445,6 +527,11 @@ function deleteEntry(id){
 
     entries =
       entries.filter(e => e.id != id);
+
+    localStorage.setItem(
+      "revelup_db",
+      JSON.stringify(entries)
+    );
 
     render();
 
