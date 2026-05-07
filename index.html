@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>REVELUP</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
 
 <style>
 
@@ -179,14 +182,6 @@ textarea{
   margin-bottom:16px;
 }
 
-.result p{
-  font-size:15px;
-  line-height:1.8;
-  color:#222;
-  margin-top:18px;
-  white-space:pre-line;
-}
-
 .tags{
   margin-top:18px;
   color:#666;
@@ -270,6 +265,7 @@ mark{
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -305,7 +301,7 @@ Base de conocimiento inteligente
     <input
       type="text"
       id="search"
-      placeholder="Buscar..."
+      placeholder="Buscar procedimientos, incidencias..."
       oninput="render()"
     >
   </div>
@@ -341,6 +337,7 @@ Base de conocimiento inteligente
 </div>
 
 <div class="form-group">
+
   <label>Tipo</label>
 
   <select id="type">
@@ -349,6 +346,7 @@ Base de conocimiento inteligente
     <option value="incidencia">Incidencia</option>
     <option value="taller">Taller</option>
   </select>
+
 </div>
 
 <div class="form-group">
@@ -361,17 +359,23 @@ Base de conocimiento inteligente
   id="solutionGroup"
   style="display:none;"
 >
+
   <label>Solución</label>
+
   <textarea id="sol"></textarea>
+
 </div>
 
 <div class="form-group">
+
   <label>Tags</label>
+
   <input
     type="text"
     id="tags"
     placeholder="#onboarding #workflow"
   >
+
 </div>
 
 <div class="actions">
@@ -418,7 +422,10 @@ let editingId = null;
 
 document
 .getElementById("type")
-.addEventListener("change",toggleSolution);
+.addEventListener(
+  "change",
+  toggleSolution
+);
 
 function toggleSolution(){
 
@@ -450,11 +457,25 @@ function clearForm(){
 
   editingId = null;
 
-  document.getElementById("title").value="";
-  document.getElementById("desc").value="";
-  document.getElementById("sol").value="";
-  document.getElementById("tags").value="";
-  document.getElementById("type").value="procedimiento";
+  document.getElementById(
+    "title"
+  ).value = "";
+
+  document.getElementById(
+    "desc"
+  ).value = "";
+
+  document.getElementById(
+    "sol"
+  ).value = "";
+
+  document.getElementById(
+    "tags"
+  ).value = "";
+
+  document.getElementById(
+    "type"
+  ).value = "procedimiento";
 
   toggleSolution();
 
@@ -525,7 +546,8 @@ function formatContent(text){
 
   if(!text) return "";
 
-  const sections = text.split("🔹");
+  const sections =
+  text.split("🔹");
 
   return sections.map(section => {
 
@@ -571,27 +593,46 @@ function render(){
   .getElementById("filter")
   .value;
 
-  let filtered =
-  entries.filter(e => {
+  const fuse =
+  new Fuse(entries, {
 
-    const matchText =
-      (
-        e.title +
-        e.desc +
-        (e.sol || "") +
-        (e.tags || "")
-      )
-      .toLowerCase()
-      .includes(q);
+    keys:[
+      "title",
+      "desc",
+      "tags",
+      "sol",
+      "type"
+    ],
 
-    const matchType =
-      filter === ""
-        ? true
-        : e.type === filter;
+    threshold:0.35,
 
-    return matchText && matchType;
+    includeScore:true
 
   });
+
+  let filtered;
+
+  if(q){
+
+    filtered =
+      fuse
+      .search(q)
+      .map(r => r.item);
+
+  }else{
+
+    filtered = entries;
+
+  }
+
+  if(filter){
+
+    filtered =
+      filtered.filter(
+        e => e.type === filter
+      );
+
+  }
 
   const html =
   filtered.map(e => `
@@ -619,10 +660,15 @@ function render(){
         && e.sol
         ?
         `
-        <p>
-          <strong>Solución:</strong><br><br>
+        <div class="content-section">
+
+          <strong>
+            Solución
+          </strong>
+
           ${highlight(e.sol,q)}
-        </p>
+
+        </div>
         `
         :
         ""
@@ -663,23 +709,36 @@ function render(){
 async function saveEntry(){
 
   const title =
-  document.getElementById("title").value;
+  document.getElementById(
+    "title"
+  ).value;
 
   const desc =
-  document.getElementById("desc").value;
+  document.getElementById(
+    "desc"
+  ).value;
 
   const sol =
-  document.getElementById("sol").value;
+  document.getElementById(
+    "sol"
+  ).value;
 
   const type =
-  document.getElementById("type").value;
+  document.getElementById(
+    "type"
+  ).value;
 
   const tags =
-  document.getElementById("tags").value;
+  document.getElementById(
+    "tags"
+  ).value;
 
   if(!title || !desc){
+
     alert("Completa los campos");
+
     return;
+
   }
 
   if(editingId){
@@ -720,7 +779,9 @@ async function saveEntry(){
 function edit(id){
 
   const e =
-  entries.find(x => x.id === id);
+  entries.find(
+    x => x.id === id
+  );
 
   if(!e) return;
 
@@ -761,8 +822,9 @@ function edit(id){
 
 async function del(id){
 
-  if(!confirm("Eliminar entrada?"))
-    return;
+  if(!confirm(
+    "Eliminar entrada?"
+  )) return;
 
   await supabaseClient
   .from("entries")
