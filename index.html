@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>REVELUP</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <style>
 
@@ -81,6 +84,15 @@ h1{
 
 .topbar input{
   flex:1;
+  min-width:300px;
+}
+
+.topbar select{
+  width:220px;
+}
+
+.topbar button{
+  min-width:140px;
 }
 
 input,
@@ -222,6 +234,7 @@ label{
   <div class="topbar">
 
     <input
+      type="text"
       id="search"
       placeholder="Buscar..."
     >
@@ -350,10 +363,19 @@ label{
 
 <script>
 
-let entries =
-  JSON.parse(
-    localStorage.getItem("revelup_db")
-  ) || [];
+const SUPABASE_URL =
+"https://nhthjjendeyfnxqfjuyh.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_kyCafDjTzfBOINRtuHJpkg_qqh_yoT1";
+
+const client =
+supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let entries = [];
 
 function toggleForm(){
 
@@ -390,7 +412,21 @@ document
 .getElementById("fType")
 .addEventListener("change", toggleSolution);
 
-function saveEntry(){
+async function loadEntries(){
+
+  const { data } =
+  await client
+  .from("entries")
+  .select("*")
+  .order("id", { ascending:false });
+
+  entries = data || [];
+
+  render();
+
+}
+
+async function saveEntry(){
 
   const id =
     document.getElementById("editId").value
@@ -417,10 +453,7 @@ function saveEntry(){
 
   const tags =
     document.getElementById("fTags")
-    .value
-    .split(",")
-    .map(t => t.trim())
-    .filter(Boolean);
+    .value;
 
   if(!title || !desc){
 
@@ -430,42 +463,24 @@ function saveEntry(){
 
   }
 
-  const existing =
-    entries.find(e => e.id == id);
+  await client
+  .from("entries")
+  .upsert([{
+    id,
+    title,
+    type,
+    desc,
+    sol,
+    tags
+  }]);
 
-  if(existing){
-
-    existing.title = title;
-    existing.type = type;
-    existing.desc = desc;
-    existing.sol = sol;
-    existing.tags = tags;
-
-  }else{
-
-    entries.unshift({
-      id,
-      title,
-      type,
-      desc,
-      sol,
-      tags
-    });
-
-  }
-
-  localStorage.setItem(
-    "revelup_db",
-    JSON.stringify(entries)
-  );
+  await loadEntries();
 
   clearForm();
 
   document
   .getElementById("formBox")
   .classList.add("hidden");
-
-  render();
 
 }
 
@@ -511,7 +526,7 @@ function editEntry(id){
     e.sol;
 
   document.getElementById("fTags").value =
-    e.tags.join(", ");
+    e.tags;
 
   toggleSolution();
 
@@ -521,19 +536,16 @@ function editEntry(id){
 
 }
 
-function deleteEntry(id){
+async function deleteEntry(id){
 
   if(confirm("¿Eliminar entrada?")){
 
-    entries =
-      entries.filter(e => e.id != id);
+    await client
+    .from("entries")
+    .delete()
+    .eq("id", id);
 
-    localStorage.setItem(
-      "revelup_db",
-      JSON.stringify(entries)
-    );
-
-    render();
+    await loadEntries();
 
   }
 
@@ -555,15 +567,19 @@ function render(){
 
       const match =
 
-        e.title.toLowerCase().includes(q)
+        (e.title || "")
+        .toLowerCase()
+        .includes(q)
 
         ||
 
-        e.desc.toLowerCase().includes(q)
+        (e.desc || "")
+        .toLowerCase()
+        .includes(q)
 
         ||
 
-        e.tags.join(" ")
+        (e.tags || "")
         .toLowerCase()
         .includes(q);
 
@@ -617,10 +633,11 @@ function render(){
         <div style="margin-top:12px;">
 
           ${
-            e.tags
+            (e.tags || "")
+            .split(",")
             .map(t => `
               <span class="tag">
-                #${t}
+                #${t.trim()}
               </span>
             `)
             .join("")
@@ -684,7 +701,7 @@ document
 
 toggleSolution();
 
-render();
+loadEntries();
 
 </script>
 
