@@ -177,6 +177,14 @@ label{
   font-weight:bold;
 }
 
+mark{
+  background:#10e7cf;
+  color:#000;
+  padding:2px 4px;
+  border-radius:4px;
+  font-weight:bold;
+}
+
 @media(max-width:900px){
 
   body{
@@ -376,6 +384,19 @@ supabase.createClient(
 );
 
 let entries = [];
+
+function highlight(text, search){
+
+  if(!search) return text;
+
+  const regex =
+    new RegExp(`(${search})`, "gi");
+
+  return text.replace(
+    regex,
+    `<mark>$1</mark>`
+  );
+}
 
 function toggleForm(){
 
@@ -581,6 +602,12 @@ function render(){
 
         (e.tags || "")
         .toLowerCase()
+        .includes(q)
+
+        ||
+
+        (e.sol || "")
+        .toLowerCase()
         .includes(q);
 
       return match &&
@@ -594,7 +621,9 @@ function render(){
 
       <div class="result">
 
-        <h3>${e.title}</h3>
+        <h3>
+          ${highlight(e.title || "", q)}
+        </h3>
 
         <div>
 
@@ -604,7 +633,9 @@ function render(){
 
         </div>
 
-        <p>${e.desc}</p>
+        <p>
+          ${highlight(e.desc || "", q)}
+        </p>
 
         ${
           e.type === "incidencia"
@@ -620,7 +651,7 @@ function render(){
 
             <br><br>
 
-            ${e.sol}
+            ${highlight(e.sol || "", q)}
 
           </div>
           `
@@ -633,14 +664,13 @@ function render(){
         <div style="margin-top:12px;">
 
           ${
-            (e.tags || "")
-            .split(",")
-            .map(t => `
-              <span class="tag">
-                #${t.trim()}
-              </span>
-            `)
-            .join("")
+            highlight(
+              (e.tags || "")
+              .split(",")
+              .map(t => `#${t.trim()}`)
+              .join(" "),
+              q
+            )
           }
 
         </div>
