@@ -1,843 +1,895 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>REVELUP</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
-
-<style>
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f5f5;
-  color:#111;
-}
-
-.container{
-  width:100%;
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
-h1{
-  text-align:center;
-  font-size:58px;
-  margin-bottom:10px;
-  font-weight:900;
-}
-
-.subtitle{
-  text-align:center;
-  color:#555;
-  margin-bottom:40px;
-  font-size:16px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-bottom:24px;
-}
-
-.card{
-  background:white;
-  border-radius:20px;
-  padding:22px;
-  border:2px solid #e5e5e5;
-}
-
-.card h2{
-  margin:0;
-  font-size:52px;
-}
-
-.card p{
-  margin-top:8px;
-  color:#666;
-  font-size:14px;
-}
-
-.toolbar{
-  background:white;
-  border-radius:20px;
-  padding:16px;
-  margin-bottom:24px;
-  border:2px solid #e5e5e5;
-  display:flex;
-  gap:12px;
-}
-
-.search{
-  flex:1;
-}
-
-.search input{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:2px solid #ddd;
-  font-size:15px;
-}
-
-select{
-  padding:14px;
-  border-radius:14px;
-  border:2px solid #ddd;
-  font-size:15px;
-  min-width:220px;
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.btn-primary{
-  background:#19e0d0;
-  padding:14px 22px;
-  border-radius:14px;
-  font-weight:700;
-  font-size:15px;
-}
-
-.btn-primary:hover{
-  opacity:0.9;
-}
-
-.form-box{
-  background:white;
-  border-radius:20px;
-  padding:22px;
-  border:2px solid #e5e5e5;
-  margin-bottom:24px;
-}
-
-.form-box h3{
-  margin-top:0;
-  font-size:28px;
-}
-
-.form-group{
-  margin-bottom:18px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:8px;
-  font-weight:700;
-}
-
-input,
-textarea{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:2px solid #ddd;
-  font-size:15px;
-}
-
-textarea{
-  min-height:120px;
-  resize:vertical;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-}
-
-.result{
-  background:white;
-  border-radius:20px;
-  padding:22px;
-  border:2px solid #e5e5e5;
-  margin-bottom:18px;
-}
-
-.result h3{
-  margin-top:0;
-  font-size:22px;
-}
-
-.badge{
-  display:inline-block;
-  padding:7px 14px;
-  border-radius:999px;
-  background:#19e0d0;
-  font-size:13px;
-  margin-bottom:16px;
-}
-
-.tags{
-  margin-top:18px;
-  color:#666;
-}
-
-.result-actions{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
-}
-
-.btn-secondary{
-  background:#ddd;
-  padding:12px 18px;
-  border-radius:12px;
-  font-weight:700;
-}
-
-.btn-danger{
-  background:#ff5b5b;
-  color:white;
-  padding:12px 18px;
-  border-radius:12px;
-  font-weight:700;
-}
-
-mark{
-  background:#fff59d;
-  padding:2px 4px;
-  border-radius:4px;
-}
-
-.content-block{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
-
-.content-section{
-  background:#fafafa;
-  border-left:4px solid #10e7cf;
-  padding:14px;
-  border-radius:12px;
-}
-
-.content-section strong{
-  display:block;
-  margin-bottom:8px;
-  font-size:15px;
-}
-
-.content-section ul{
-  margin:0;
-  padding-left:18px;
-}
-
-.content-section li{
-  margin-bottom:8px;
-  line-height:1.7;
-}
-
-@media(max-width:900px){
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .toolbar{
-    flex-direction:column;
-  }
-
-  select{
-    width:100%;
-  }
-
-  h1{
-    font-size:42px;
-  }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>REVELUP</h1>
-
-<div class="subtitle">
-Base de conocimiento inteligente
-</div>
-
-<div class="stats">
-
-  <div class="card">
-    <h2 id="totalEntries">0</h2>
-    <p>Entradas</p>
-  </div>
-
-  <div class="card">
-    <h2 id="totalIncidents">0</h2>
-    <p>Incidencias</p>
-  </div>
-
-  <div class="card">
-    <h2 id="totalProcedures">0</h2>
-    <p>Procedimientos</p>
-  </div>
-
-</div>
-
-<div class="toolbar">
-
-  <div class="search">
-    <input
-      type="text"
-      id="search"
-      placeholder="Buscar procedimientos, incidencias..."
-      oninput="render()"
-    >
-  </div>
-
-  <select id="filter" onchange="render()">
-    <option value="">Todas</option>
-    <option value="procedimiento">Procedimientos</option>
-    <option value="documentacion">Documentación</option>
-    <option value="incidencia">Incidencias</option>
-    <option value="taller">Talleres</option>
-  </select>
-
-  <button
-    class="btn-primary"
-    onclick="toggleForm()"
-  >
-    + Nueva entrada
-  </button>
-
-</div>
-
-<div
-  class="form-box"
-  id="formBox"
-  style="display:none;"
->
-
-<h3>Nueva entrada</h3>
-
-<div class="form-group">
-  <label>Título</label>
-  <input type="text" id="title">
-</div>
-
-<div class="form-group">
-
-  <label>Tipo</label>
-
-  <select id="type">
-    <option value="procedimiento">Procedimiento</option>
-    <option value="documentacion">Documentación</option>
-    <option value="incidencia">Incidencia</option>
-    <option value="taller">Taller</option>
-  </select>
-
-</div>
-
-<div class="form-group">
-  <label>Descripción</label>
-  <textarea id="desc"></textarea>
-</div>
-
-<div
-  class="form-group"
-  id="solutionGroup"
-  style="display:none;"
->
-
-  <label>Solución</label>
-
-  <textarea id="sol"></textarea>
-
-</div>
-
-<div class="form-group">
-
-  <label>Tags</label>
-
-  <input
-    type="text"
-    id="tags"
-    placeholder="#onboarding #workflow"
-  >
-
-</div>
-
-<div class="actions">
-
-  <button
-    class="btn-primary"
-    onclick="saveEntry()"
-  >
-    Guardar
-  </button>
-
-  <button
-    class="btn-secondary"
-    onclick="toggleForm()"
-  >
-    Cancelar
-  </button>
-
-</div>
-
-</div>
-
-<div id="results"></div>
-
-</div>
-
-<script>
-
-const SUPABASE_URL =
-"https://nhthjjendeyfnxqfjuyh.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_kyCafDjTzfBOINRtuHJpkg_qqh_yoT1";
-
-const supabaseClient =
-supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-let entries = [];
-
-let editingId = null;
-
-document
-.getElementById("type")
-.addEventListener(
-  "change",
-  toggleSolution
-);
-
-function toggleSolution(){
-
-  const type =
-  document.getElementById("type").value;
-
-  document.getElementById(
-    "solutionGroup"
-  ).style.display =
-    type === "incidencia"
-    ? "block"
-    : "none";
-
-}
-
-function toggleForm(){
-
-  const form =
-  document.getElementById("formBox");
-
-  form.style.display =
-    form.style.display === "none"
-    ? "block"
-    : "none";
-
-}
-
-function clearForm(){
-
-  editingId = null;
-
-  document.getElementById(
-    "title"
-  ).value = "";
-
-  document.getElementById(
-    "desc"
-  ).value = "";
-
-  document.getElementById(
-    "sol"
-  ).value = "";
-
-  document.getElementById(
-    "tags"
-  ).value = "";
-
-  document.getElementById(
-    "type"
-  ).value = "procedimiento";
-
-  toggleSolution();
-
-}
-
-async function loadEntries(){
-
-  const { data,error } =
-  await supabaseClient
-  .from("entries")
-  .select("*")
-  .order("id",{ascending:false});
-
-  if(error){
-    console.error(error);
-    return;
-  }
-
-  entries = data || [];
-
-  updateStats();
-
-  render();
-
-}
-
-function updateStats(){
-
-  document.getElementById(
-    "totalEntries"
-  ).innerText =
-    entries.length;
-
-  document.getElementById(
-    "totalIncidents"
-  ).innerText =
-    entries.filter(
-      e => e.type === "incidencia"
-    ).length;
-
-  document.getElementById(
-    "totalProcedures"
-  ).innerText =
-    entries.filter(
-      e =>
-        e.type === "procedimiento"
-        || e.type === "documentacion"
-        || e.type === "taller"
-    ).length;
-
-}
-
-function highlight(text,query){
-
-  if(!query) return text;
-
-  const regex =
-  new RegExp(`(${query})`,"gi");
-
-  return text.replace(
-    regex,
-    `<mark>$1</mark>`
-  );
-
-}
-
-function formatContent(text){
-
-  if(!text) return "";
-
-  const sections =
-  text.split("🔹");
-
-  return sections.map(section => {
-
-    if(section.trim()==="") return "";
-
-    const lines =
-    section.trim().split("\n");
-
-    const title =
-    lines[0];
-
-    const items =
-    lines.slice(1);
-
-    return `
-      <div class="content-section">
-
-        <strong>${title}</strong>
-
-        <ul>
-          ${items.map(item => `
-            <li>${item}</li>
-          `).join("")}
-        </ul>
-
-      </div>
-    `;
-
-  }).join("");
-
-}
-
-function render(){
-
-  const q =
-  document
-  .getElementById("search")
-  .value
-  .toLowerCase();
-
-  const filter =
-  document
-  .getElementById("filter")
-  .value;
-
-  const fuse =
-  new Fuse(entries, {
-
-    keys:[
-      "title",
-      "desc",
-      "tags",
-      "sol",
-      "type"
-    ],
-
-    threshold:0.35,
-
-    includeScore:true
-
-  });
-
-  let filtered;
-
-  if(q){
-
-    filtered =
-      fuse
-      .search(q)
-      .map(r => r.item);
-
-  }else{
-
-    filtered = entries;
-
-  }
-
-  if(filter){
-
-    filtered =
-      filtered.filter(
-        e => e.type === filter
-      );
-
-  }
-
-  const html =
-  filtered.map(e => `
-
-    <div class="result">
-
-      <h3>
-        ${highlight(e.title,q)}
-      </h3>
-
-      <div class="badge">
-        ${e.type}
-      </div>
-
-      <div class="content-block">
-
-        ${formatContent(
-          highlight(e.desc || "", q)
-        )}
-
-      </div>
-
-      ${
-        e.type === "incidencia"
-        && e.sol
-        ?
-        `
-        <div class="content-section">
-
-          <strong>
-            Solución
-          </strong>
-
-          ${highlight(e.sol,q)}
-
-        </div>
-        `
-        :
-        ""
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REVELUP</title>
+  <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/@supabase/supabase-js)"></script>
+  <script src="[cdn.jsdelivr.net](https://cdn.jsdelivr.net/npm/fuse.js@7.0.0)"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 58px;
+      margin-bottom: 10px;
+      font-weight: 900;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #555;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      border: 2px solid #e5e5e5;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 52px;
+    }
+
+    .card p {
+      margin-top: 8px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .toolbar {
+      background: white;
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 24px;
+      border: 2px solid #e5e5e5;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border-radius: 14px;
+      border: 2px solid #ddd;
+      font-size: 15px;
+      transition: border-color 0.2s;
+    }
+
+    .search input:focus {
+      outline: none;
+      border-color: #19e0d0;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #999;
+    }
+
+    .search-hint {
+      font-size: 12px;
+      color: #888;
+      margin-top: 6px;
+      padding-left: 4px;
+    }
+
+    select {
+      padding: 14px;
+      border-radius: 14px;
+      border: 2px solid #ddd;
+      font-size: 15px;
+      min-width: 180px;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: #19e0d0;
+      padding: 14px 22px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .form-box {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      border: 2px solid #e5e5e5;
+      margin-bottom: 24px;
+    }
+
+    .form-box h3 {
+      margin-top: 0;
+      font-size: 28px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: 2px solid #ddd;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .result {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      border: 2px solid #e5e5e5;
+      margin-bottom: 18px;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+
+    .result:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .result h3 {
+      margin-top: 0;
+      font-size: 22px;
+      padding-right: 70px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #19e0d0;
+      font-size: 13px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .badge.procedimiento { background: #19e0d0; }
+    .badge.documentacion { background: #64b5f6; }
+    .badge.incidencia { background: #ffb74d; }
+    .badge.taller { background: #ba68c8; color: white; }
+
+    .score-badge {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tags {
+      margin-top: 18px;
+      color: #666;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn-secondary {
+      background: #ddd;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .btn-danger {
+      background: #ff5b5b;
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    mark {
+      background: #fff59d;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    .content-block {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .content-section {
+      background: #fafafa;
+      border-left: 4px solid #10e7cf;
+      padding: 14px;
+      border-radius: 12px;
+    }
+
+    .content-section strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .content-section ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .content-section li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+
+    .no-results h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    .search-tips {
+      background: white;
+      border-radius: 20px;
+      padding: 22px;
+      border: 2px solid #e5e5e5;
+      margin-bottom: 24px;
+    }
+
+    .search-tips h4 {
+      margin-top: 0;
+      margin-bottom: 16px;
+    }
+
+    .search-tips code {
+      background: #f0f0f0;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    .search-tips ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .search-tips li {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+
+    .results-info {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 16px;
+      padding-left: 4px;
+    }
+
+    @media(max-width: 900px) {
+      .stats {
+        grid-template-columns: 1fr;
       }
 
-      <div class="tags">
-        ${highlight(e.tags || "",q)}
+      .toolbar {
+        flex-direction: column;
+      }
+
+      select {
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .search {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>REVELUP</h1>
+    <div class="subtitle">Base de conocimiento inteligente</div>
+
+    <div class="stats">
+      <div class="card">
+        <h2 id="totalEntries">0</h2>
+        <p>Entradas</p>
       </div>
-
-      <div class="result-actions">
-
-        <button
-          class="btn-secondary"
-          onclick="edit(${e.id})"
-        >
-          Editar
-        </button>
-
-        <button
-          class="btn-danger"
-          onclick="del(${e.id})"
-        >
-          Eliminar
-        </button>
-
+      <div class="card">
+        <h2 id="totalIncidents">0</h2>
+        <p>Incidencias</p>
       </div>
-
+      <div class="card">
+        <h2 id="totalProcedures">0</h2>
+        <p>Procedimientos</p>
+      </div>
     </div>
 
-  `).join("");
+    <div class="toolbar">
+      <div class="search">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="search"
+          placeholder="Buscar... (usa 'palabra para coincidencia exacta)"
+          oninput="debouncedRender()"
+        >
+      </div>
+      <select id="filter" onchange="render()">
+        <option value="">Todas las categorías</option>
+        <option value="procedimiento">Procedimientos</option>
+        <option value="documentacion">Documentación</option>
+        <option value="incidencia">Incidencias</option>
+        <option value="taller">Talleres</option>
+      </select>
+      <button class="btn-primary" onclick="toggleForm()">+ Nueva entrada</button>
+    </div>
 
-  document.getElementById(
-    "results"
-  ).innerHTML = html;
+    <div class="search-tips" id="searchTips" style="display: none;">
+      <h4>💡 Búsqueda avanzada</h4>
+      <ul>
+        <li><code>'texto</code> — Coincidencia exacta de "texto"</li>
+        <li><code>^inicio</code> — Debe empezar con "inicio"</li>
+        <li><code>final$</code> — Debe terminar con "final"</li>
+        <li><code>!excluir</code> — No debe contener "excluir"</li>
+        <li><code>palabra1 palabra2</code> — Contiene ambas palabras (en cualquier orden)</li>
+        <li><code>palabra1 | palabra2</code> — Contiene una u otra palabra</li>
+      </ul>
+    </div>
 
-}
+    <div class="form-box" id="formBox" style="display: none;">
+      <h3 id="formTitle">Nueva entrada</h3>
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" id="title" placeholder="Ej: Proceso de onboarding">
+      </div>
+      <div class="form-group">
+        <label>Tipo</label>
+        <select id="type" onchange="toggleSolution()">
+          <option value="procedimiento">Procedimiento</option>
+          <option value="documentacion">Documentación</option>
+          <option value="incidencia">Incidencia</option>
+          <option value="taller">Taller</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <textarea id="desc" placeholder="Describe el contenido detalladamente..."></textarea>
+      </div>
+      <div class="form-group" id="solutionGroup" style="display: none;">
+        <label>Solución</label>
+        <textarea id="sol" placeholder="Pasos para resolver la incidencia..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>Tags</label>
+        <input type="text" id="tags" placeholder="#onboarding #workflow #importante">
+      </div>
+      <div class="actions">
+        <button class="btn-primary" onclick="saveEntry()">Guardar</button>
+        <button class="btn-secondary" onclick="toggleForm()">Cancelar</button>
+      </div>
+    </div>
 
-async function saveEntry(){
+    <div id="resultsInfo" class="results-info"></div>
+    <div id="results"></div>
+  </div>
 
-  const title =
-  document.getElementById(
-    "title"
-  ).value;
+  <script>
+    // ==================== CONFIGURACIÓN ====================
+    const SUPABASE_URL = "[nhthjjendeyfnxqfjuyh.supabase.co](https://nhthjjendeyfnxqfjuyh.supabase.co)";
+    const SUPABASE_KEY = "sb_publishable_kyCafDjTzfBOINRtuHJpkg_qqh_yoT1";
+    
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  const desc =
-  document.getElementById(
-    "desc"
-  ).value;
+    let entries = [];
+    let editingId = null;
+    let debounceTimer = null;
 
-  const sol =
-  document.getElementById(
-    "sol"
-  ).value;
+    // ==================== CONFIGURACIÓN FUSE.JS OPTIMIZADA ====================
+    const fuseOptions = {
+      // Campos donde buscar con pesos de importancia
+      keys: [
+        { name: "title", weight: 4 },        // Título es lo más importante
+        { name: "tags", weight: 3 },         // Tags muy relevantes
+        { name: "type", weight: 2 },         // Tipo de entrada
+        { name: "desc", weight: 1.5 },       // Descripción
+        { name: "sol", weight: 1 }           // Solución (para incidencias)
+      ],
+      
+      // Umbral de coincidencia (0 = exacto, 1 = todo coincide)
+      threshold: 0.35,
+      
+      // Distancia máxima entre caracteres para fuzzy matching
+      distance: 100,
+      
+      // Ignora la ubicación del match en el texto
+      ignoreLocation: true,
+      
+      // Incluye el score en resultados
+      includeScore: true,
+      
+      // Incluye info de dónde se encontraron los matches
+      includeMatches: true,
+      
+      // Mínimo de caracteres para considerar un match
+      minMatchCharLength: 2,
+      
+      // Busca todos los matches, no solo el primero
+      findAllMatches: true,
+      
+      // Habilita búsqueda extendida con operadores
+      useExtendedSearch: true,
+      
+      // Ignora mayúsculas/minúsculas
+      isCaseSensitive: false,
+      
+      // Ordena por score
+      shouldSort: true,
+      
+      // Para campos con arrays (si los tuvieras)
+      getFn: (obj, path) => {
+        const value = Fuse.config.getFn(obj, path);
+        if (Array.isArray(value)) {
+          return value.join(' ');
+        }
+        return value;
+      }
+    };
 
-  const type =
-  document.getElementById(
-    "type"
-  ).value;
+    let fuse = null;
 
-  const tags =
-  document.getElementById(
-    "tags"
-  ).value;
+    // Inicializa o actualiza el índice de Fuse
+    function initFuse() {
+      fuse = new Fuse(entries, fuseOptions);
+    }
 
-  if(!title || !desc){
+    // ==================== DEBOUNCE PARA BÚSQUEDA ====================
+    function debouncedRender() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        render();
+      }, 150); // Espera 150ms después de que el usuario deje de escribir
+    }
 
-    alert("Completa los campos");
+    // ==================== FUNCIONES DE UI ====================
+    function toggleSolution() {
+      const type = document.getElementById("type").value;
+      document.getElementById("solutionGroup").style.display = 
+        type === "incidencia" ? "block" : "none";
+    }
 
-    return;
+    function toggleForm() {
+      const form = document.getElementById("formBox");
+      const isHidden = form.style.display === "none";
+      form.style.display = isHidden ? "block" : "none";
+      
+      if (!isHidden) {
+        clearForm();
+      }
+    }
 
-  }
+    function clearForm() {
+      editingId = null;
+      document.getElementById("formTitle").textContent = "Nueva entrada";
+      document.getElementById("title").value = "";
+      document.getElementById("desc").value = "";
+      document.getElementById("sol").value = "";
+      document.getElementById("tags").value = "";
+      document.getElementById("type").value = "procedimiento";
+      toggleSolution();
+    }
 
-  if(editingId){
+    // Mostrar/ocultar tips de búsqueda
+    document.getElementById("search").addEventListener("focus", () => {
+      document.getElementById("searchTips").style.display = "block";
+    });
 
-    await supabaseClient
-    .from("entries")
-    .update({
-      title,
-      desc,
-      sol,
-      type,
-      tags
-    })
-    .eq("id",editingId);
+    document.getElementById("search").addEventListener("blur", () => {
+      setTimeout(() => {
+        document.getElementById("searchTips").style.display = "none";
+      }, 200);
+    });
 
-  }else{
+    // ==================== CARGA DE DATOS ====================
+    async function loadEntries() {
+      const { data, error } = await supabaseClient
+        .from("entries")
+        .select("*")
+        .order("id", { ascending: false });
 
-    await supabaseClient
-    .from("entries")
-    .insert([{
-      title,
-      desc,
-      sol,
-      type,
-      tags
-    }]);
+      if (error) {
+        console.error("Error cargando entradas:", error);
+        return;
+      }
 
-  }
+      entries = data || [];
+      initFuse(); // Reinicializa el índice de búsqueda
+      updateStats();
+      render();
+    }
 
-  clearForm();
+    function updateStats() {
+      document.getElementById("totalEntries").innerText = entries.length;
+      
+      document.getElementById("totalIncidents").innerText = 
+        entries.filter(e => e.type === "incidencia").length;
+      
+      document.getElementById("totalProcedures").innerText = 
+        entries.filter(e => 
+          e.type === "procedimiento" || 
+          e.type === "documentacion" || 
+          e.type === "taller"
+        ).length;
+    }
 
-  toggleForm();
+    // ==================== RESALTADO INTELIGENTE ====================
+    function highlightMatches(text, matches, fieldName) {
+      if (!text || !matches) return text || '';
+      
+      // Busca matches para este campo específico
+      const fieldMatches = matches.filter(m => m.key === fieldName);
+      
+      if (fieldMatches.length === 0) {
+        return text;
+      }
 
-  loadEntries();
+      // Obtiene todos los índices a resaltar
+      let indices = [];
+      fieldMatches.forEach(match => {
+        if (match.indices) {
+          indices = indices.concat(match.indices);
+        }
+      });
 
-}
+      // Ordena y combina índices superpuestos
+      indices.sort((a, b) => a[0] - b[0]);
+      const mergedIndices = [];
+      indices.forEach(([start, end]) => {
+        if (mergedIndices.length === 0) {
+          mergedIndices.push([start, end]);
+        } else {
+          const last = mergedIndices[mergedIndices.length - 1];
+          if (start <= last[1] + 1) {
+            last[1] = Math.max(last[1], end);
+          } else {
+            mergedIndices.push([start, end]);
+          }
+        }
+      });
 
-function edit(id){
+      // Aplica el resaltado de atrás hacia adelante para no afectar los índices
+      let result = text;
+      for (let i = mergedIndices.length - 1; i >= 0; i--) {
+        const [start, end] = mergedIndices[i];
+        const before = result.substring(0, start);
+        const match = result.substring(start, end + 1);
+        const after = result.substring(end + 1);
+        result = before + '<mark>' + match + '</mark>' + after;
+      }
 
-  const e =
-  entries.find(
-    x => x.id === id
-  );
+      return result;
+    }
 
-  if(!e) return;
+    // Resaltado simple para búsquedas sin matches detallados
+    function simpleHighlight(text, query) {
+      if (!query || !text) return text || '';
+      
+      // Escapa caracteres especiales de regex
+      const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const words = escaped.split(/\s+/).filter(w => w.length > 1);
+      
+      if (words.length === 0) return text;
+      
+      const regex = new RegExp(`(${words.join('|')})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    }
 
-  editingId = id;
+    // ==================== FORMATEO DE CONTENIDO ====================
+    function formatContent(text, matches, fieldName) {
+      if (!text) return "";
 
-  document.getElementById(
-    "title"
-  ).value = e.title;
+      const highlighted = matches 
+        ? highlightMatches(text, matches, fieldName)
+        : text;
 
-  document.getElementById(
-    "desc"
-  ).value = e.desc;
+      const sections = highlighted.split("🔹");
+      
+      return sections.map(section => {
+        if (section.trim() === "") return "";
+        
+        const lines = section.trim().split("\n");
+        const title = lines[0];
+        const items = lines.slice(1).filter(item => item.trim());
 
-  document.getElementById(
-    "sol"
-  ).value = e.sol || "";
+        if (items.length === 0) {
+          return `
+            <div class="content-section">
+              <p style="margin:0">${title}</p>
+            </div>
+          `;
+        }
 
-  document.getElementById(
-    "type"
-  ).value = e.type;
+        return `
+          <div class="content-section">
+            <strong>${title}</strong>
+            <ul>
+              ${items.map(item => `<li>${item}</li>`).join("")}
+            </ul>
+          </div>
+        `;
+      }).join("");
+    }
 
-  document.getElementById(
-    "tags"
-  ).value = e.tags || "";
+    // ==================== RENDERIZADO ====================
+    function render() {
+      const query = document.getElementById("search").value.trim();
+      const filter = document.getElementById("filter").value;
+      
+      let results;
+      let searchPerformed = false;
 
-  toggleSolution();
+      // Búsqueda con Fuse.js
+      if (query && query.length >= 1) {
+        searchPerformed = true;
+        const fuseResults = fuse.search(query);
+        
+        results = fuseResults.map(result => ({
+          ...result.item,
+          score: result.score,
+          matches: result.matches
+        }));
+      } else {
+        results = entries.map(e => ({ ...e, score: null, matches: null }));
+      }
 
-  document.getElementById(
-    "formBox"
-  ).style.display = "block";
+      // Filtro por tipo
+      if (filter) {
+        results = results.filter(e => e.type === filter);
+      }
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+      // Actualiza info de resultados
+      const infoEl = document.getElementById("resultsInfo");
+      if (searchPerformed) {
+        infoEl.textContent = `${results.length} resultado${results.length !== 1 ? 's' : ''} para "${query}"`;
+      } else if (filter) {
+        infoEl.textContent = `${results.length} entrada${results.length !== 1 ? 's' : ''} en ${filter}`;
+      } else {
+        infoEl.textContent = '';
+      }
 
-}
+      // Renderiza resultados
+      if (results.length === 0) {
+        document.getElementById("results").innerHTML = `
+          <div class="no-results">
+            <h3>😕 No se encontraron resultados</h3>
+            <p>Intenta con otros términos o revisa los tips de búsqueda avanzada</p>
+          </div>
+        `;
+        return;
+      }
 
-async function del(id){
+      const html = results.map(e => {
+        const scorePercent = e.score !== null 
+          ? Math.round((1 - e.score) * 100) 
+          : null;
 
-  if(!confirm(
-    "Eliminar entrada?"
-  )) return;
+        // Usa resaltado inteligente si hay matches, sino resaltado simple
+        const titleHighlighted = e.matches 
+          ? highlightMatches(e.title, e.matches, 'title')
+          : simpleHighlight(e.title, query);
+        
+        const tagsHighlighted = e.matches
+          ? highlightMatches(e.tags || '', e.matches, 'tags')
+          : simpleHighlight(e.tags || '', query);
 
-  await supabaseClient
-  .from("entries")
-  .delete()
-  .eq("id",id);
+        const solHighlighted = e.matches
+          ? highlightMatches(e.sol || '', e.matches, 'sol')
+          : simpleHighlight(e.sol || '', query);
 
-  loadEntries();
+        return `
+          <div class="result">
+            ${scorePercent !== null ? `<div class="score-badge">${scorePercent}%</div>` : ''}
+            
+            <h3>${titleHighlighted}</h3>
+            
+            <div class="badge ${e.type}">${e.type}</div>
+            
+            <div class="content-block">
+              ${formatContent(e.desc, e.matches, 'desc')}
+            </div>
+            
+            ${e.type === "incidencia" && e.sol ? `
+              <div class="content-section" style="border-left-color: #ffb74d;">
+                <strong>💡 Solución</strong>
+                <p style="margin:0">${solHighlighted}</p>
+              </div>
+            ` : ""}
+            
+            ${e.tags ? `<div class="tags">🏷️ ${tagsHighlighted}</div>` : ''}
+            
+            <div class="result-actions">
+              <button class="btn-secondary" onclick="edit(${e.id})">✏️ Editar</button>
+              <button class="btn-danger" onclick="del(${e.id})">🗑️ Eliminar</button>
+            </div>
+          </div>
+        `;
+      }).join("");
 
-}
+      document.getElementById("results").innerHTML = html;
+    }
 
-loadEntries();
+    // ==================== CRUD ====================
+    async function saveEntry() {
+      const title = document.getElementById("title").value.trim();
+      const desc = document.getElementById("desc").value.trim();
+      const sol = document.getElementById("sol").value.trim();
+      const type = document.getElementById("type").value;
+      const tags = document.getElementById("tags").value.trim();
 
-</script>
+      if (!title || !desc) {
+        alert("Por favor completa el título y la descripción");
+        return;
+      }
 
+      const entryData = { title, desc, sol, type, tags };
+
+      if (editingId) {
+        const { error } = await supabaseClient
+          .from("entries")
+          .update(entryData)
+          .eq("id", editingId);
+
+        if (error) {
+          console.error("Error actualizando:", error);
+          alert("Error al actualizar la entrada");
+          return;
+        }
+      } else {
+        const { error } = await supabaseClient
+          .from("entries")
+          .insert([entryData]);
+
+        if (error) {
+          console.error("Error guardando:", error);
+          alert("Error al guardar la entrada");
+          return;
+        }
+      }
+
+      clearForm();
+      toggleForm();
+      loadEntries();
+    }
+
+    function edit(id) {
+      const entry = entries.find(e => e.id === id);
+      if (!entry) return;
+
+      editingId = id;
+      document.getElementById("formTitle").textContent = "Editar entrada";
+      document.getElementById("title").value = entry.title || '';
+      document.getElementById("desc").value = entry.desc || '';
+      document.getElementById("sol").value = entry.sol || '';
+      document.getElementById("type").value = entry.type || 'procedimiento';
+      document.getElementById("tags").value = entry.tags || '';
+      
+      toggleSolution();
+      document.getElementById("formBox").style.display = "block";
+      
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function del(id) {
+      if (!confirm("¿Estás seguro de eliminar esta entrada?")) return;
+
+      const { error } = await supabaseClient
+        .from("entries")
+        .delete()
+        .eq("id", id);
+
+      if (error) {
+        console.error("Error eliminando:", error);
+        alert("Error al eliminar la entrada");
+        return;
+      }
+
+      loadEntries();
+    }
+
+    // ==================== ATAJOS DE TECLADO ====================
+    document.addEventListener('keydown', (e) => {
+      // Ctrl/Cmd + K para enfocar búsqueda
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        document.getElementById('search').focus();
+      }
+      
+      // Escape para cerrar formulario
+      if (e.key === 'Escape') {
+        const form = document.getElementById("formBox");
+        if (form.style.display !== "none") {
+          toggleForm();
+        }
+      }
+    });
+
+    // ==================== INICIALIZACIÓN ====================
+    loadEntries();
+  </script>
 </body>
 </html>
