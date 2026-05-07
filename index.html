@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,203 +19,266 @@ body{
   font-family:Arial,sans-serif;
   background:#f5f5f5;
   color:#111;
-  zoom:0.72;
 }
 
 .container{
-  max-width:1000px;
+  width:100%;
+  max-width:1100px;
   margin:auto;
-  padding:8px;
+  padding:20px;
 }
 
 h1{
   text-align:center;
-  font-size:42px;
+  font-size:58px;
   margin-bottom:10px;
   font-weight:900;
 }
 
 .subtitle{
   text-align:center;
-  font-size:16px;
   color:#555;
-  margin-bottom:30px;
+  margin-bottom:40px;
+  font-size:16px;
 }
 
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:20px;
+  gap:16px;
+  margin-bottom:24px;
 }
 
 .card{
   background:white;
-  border:2px solid #ddd;
-  border-radius:18px;
-  padding:18px;
+  border-radius:20px;
+  padding:22px;
+  border:2px solid #e5e5e5;
 }
 
 .card h2{
   margin:0;
-  font-size:38px;
+  font-size:52px;
 }
 
 .card p{
   margin-top:8px;
-  font-size:15px;
-  color:#555;
+  color:#666;
+  font-size:14px;
 }
 
-.box{
+.toolbar{
   background:white;
-  border:2px solid #ddd;
-  border-radius:18px;
-  padding:14px;
-  margin-bottom:20px;
-}
-
-.topbar{
+  border-radius:20px;
+  padding:16px;
+  margin-bottom:24px;
+  border:2px solid #e5e5e5;
   display:flex;
-  gap:10px;
-  align-items:center;
+  gap:12px;
 }
 
-.topbar input{
+.search{
   flex:1;
-  min-width:300px;
 }
 
-.topbar select{
-  width:220px;
-}
-
-.topbar button{
-  min-width:140px;
-}
-
-input,
-select,
-textarea{
+.search input{
   width:100%;
-  padding:10px;
-  border-radius:12px;
-  border:2px solid #ccc;
-  font-size:13px;
+  padding:14px;
+  border-radius:14px;
+  border:2px solid #ddd;
+  font-size:15px;
 }
 
-textarea{
-  min-height:90px;
-  resize:vertical;
+select{
+  padding:14px;
+  border-radius:14px;
+  border:2px solid #ddd;
+  font-size:15px;
+  min-width:220px;
 }
 
 button{
-  border:0;
-  padding:10px 16px;
-  border-radius:12px;
+  border:none;
   cursor:pointer;
-  font-weight:bold;
-  font-size:13px;
+  transition:0.2s;
 }
 
 .btn-primary{
-  background:#10e7cf;
+  background:#19e0d0;
+  padding:14px 22px;
+  border-radius:14px;
+  font-weight:700;
+  font-size:15px;
 }
 
-.btn-secondary{
-  background:#d9d9d9;
+.btn-primary:hover{
+  opacity:0.9;
 }
 
-.btn-danger{
-  background:#ff5f5f;
-  color:white;
+.form-box{
+  background:white;
+  border-radius:20px;
+  padding:22px;
+  border:2px solid #e5e5e5;
+  margin-bottom:24px;
 }
 
-.hidden{
-  display:none;
+.form-box h3{
+  margin-top:0;
+  font-size:28px;
+}
+
+.form-group{
+  margin-bottom:18px;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:8px;
+  font-weight:700;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:14px;
+  border-radius:14px;
+  border:2px solid #ddd;
+  font-size:15px;
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
 }
 
 .result{
   background:white;
-  border:2px solid #ddd;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
+  border-radius:20px;
+  padding:22px;
+  border:2px solid #e5e5e5;
+  margin-bottom:18px;
 }
 
 .result h3{
   margin-top:0;
-  font-size:20px;
+  font-size:22px;
 }
 
-.tag{
+.badge{
   display:inline-block;
-  background:#10e7cf;
-  padding:4px 8px;
-  border-radius:10px;
-  margin-right:4px;
-  margin-bottom:4px;
-  font-size:11px;
-}
-
-.solution{
-  margin-top:10px;
-  background:#e9fffb;
-  border-left:4px solid #10e7cf;
-  padding:10px;
-  border-radius:10px;
+  padding:7px 14px;
+  border-radius:999px;
+  background:#19e0d0;
   font-size:13px;
+  margin-bottom:16px;
 }
 
-.actions{
-  margin-top:12px;
+.result p{
+  font-size:15px;
+  line-height:1.8;
+  color:#222;
+  margin-top:18px;
+  white-space:pre-line;
 }
 
-label{
-  font-size:13px;
-  font-weight:bold;
+.tags{
+  margin-top:18px;
+  color:#666;
+}
+
+.result-actions{
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+.btn-secondary{
+  background:#ddd;
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:700;
+}
+
+.btn-danger{
+  background:#ff5b5b;
+  color:white;
+  padding:12px 18px;
+  border-radius:12px;
+  font-weight:700;
 }
 
 mark{
-  background:#10e7cf;
-  color:#000;
+  background:#fff59d;
   padding:2px 4px;
   border-radius:4px;
-  font-weight:bold;
+}
+
+.content-block{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.content-section{
+  background:#fafafa;
+  border-left:4px solid #10e7cf;
+  padding:14px;
+  border-radius:12px;
+}
+
+.content-section strong{
+  display:block;
+  margin-bottom:8px;
+  font-size:15px;
+}
+
+.content-section ul{
+  margin:0;
+  padding-left:18px;
+}
+
+.content-section li{
+  margin-bottom:8px;
+  line-height:1.7;
 }
 
 @media(max-width:900px){
-
-  body{
-    zoom:1;
-  }
 
   .stats{
     grid-template-columns:1fr;
   }
 
-  .topbar{
+  .toolbar{
     flex-direction:column;
   }
 
+  select{
+    width:100%;
+  }
+
   h1{
-    font-size:34px;
+    font-size:42px;
   }
 
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
 <h1>REVELUP</h1>
 
-<p class="subtitle">
-  Base de conocimiento inteligente
-</p>
+<div class="subtitle">
+Base de conocimiento inteligente
+</div>
 
 <div class="stats">
 
@@ -237,117 +299,82 @@ mark{
 
 </div>
 
-<div class="box">
+<div class="toolbar">
 
-  <div class="topbar">
-
+  <div class="search">
     <input
       type="text"
       id="search"
       placeholder="Buscar..."
+      oninput="render()"
     >
-
-    <select id="filterType">
-
-      <option value="">
-        Todos los tipos
-      </option>
-
-      <option value="procedimiento">
-        Procedimiento
-      </option>
-
-      <option value="tip">
-        Tip / Truco
-      </option>
-
-      <option value="documentacion">
-        Documentación
-      </option>
-
-      <option value="incidencia">
-        Incidencia
-      </option>
-
-    </select>
-
-    <button
-      class="btn-primary"
-      onclick="toggleForm()"
-    >
-      + Nueva entrada
-    </button>
-
   </div>
+
+  <select id="filter" onchange="render()">
+    <option value="">Todas</option>
+    <option value="procedimiento">Procedimientos</option>
+    <option value="documentacion">Documentación</option>
+    <option value="incidencia">Incidencias</option>
+    <option value="taller">Talleres</option>
+  </select>
+
+  <button
+    class="btn-primary"
+    onclick="toggleForm()"
+  >
+    + Nueva entrada
+  </button>
 
 </div>
 
 <div
+  class="form-box"
   id="formBox"
-  class="box hidden"
+  style="display:none;"
 >
 
-  <h2>Nueva entrada</h2>
+<h3>Nueva entrada</h3>
 
-  <input
-    type="hidden"
-    id="editId"
-  >
-
+<div class="form-group">
   <label>Título</label>
+  <input type="text" id="title">
+</div>
 
-  <input id="fTitle">
-
-  <br><br>
-
+<div class="form-group">
   <label>Tipo</label>
 
-  <select id="fType">
-
-    <option value="procedimiento">
-      Procedimiento
-    </option>
-
-    <option value="tip">
-      Tip / Truco
-    </option>
-
-    <option value="documentacion">
-      Documentación
-    </option>
-
-    <option value="incidencia">
-      Incidencia
-    </option>
-
+  <select id="type">
+    <option value="procedimiento">Procedimiento</option>
+    <option value="documentacion">Documentación</option>
+    <option value="incidencia">Incidencia</option>
+    <option value="taller">Taller</option>
   </select>
+</div>
 
-  <br><br>
-
+<div class="form-group">
   <label>Descripción</label>
+  <textarea id="desc"></textarea>
+</div>
 
-  <textarea id="fDesc"></textarea>
+<div
+  class="form-group"
+  id="solutionGroup"
+  style="display:none;"
+>
+  <label>Solución</label>
+  <textarea id="sol"></textarea>
+</div>
 
-  <br><br>
-
-  <div id="solBox" class="hidden">
-
-    <label>Solución</label>
-
-    <textarea id="fSol"></textarea>
-
-    <br><br>
-
-  </div>
-
+<div class="form-group">
   <label>Tags</label>
-
   <input
-    id="fTags"
-    placeholder="factura, error, cliente"
+    type="text"
+    id="tags"
+    placeholder="#onboarding #workflow"
   >
+</div>
 
-  <br><br>
+<div class="actions">
 
   <button
     class="btn-primary"
@@ -365,6 +392,8 @@ mark{
 
 </div>
 
+</div>
+
 <div id="results"></div>
 
 </div>
@@ -377,7 +406,7 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_kyCafDjTzfBOINRtuHJpkg_qqh_yoT1";
 
-const client =
+const supabaseClient =
 supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY
@@ -385,351 +414,364 @@ supabase.createClient(
 
 let entries = [];
 
-function highlight(text, search){
+let editingId = null;
 
-  if(!search) return text;
-
-  const regex =
-    new RegExp(`(${search})`, "gi");
-
-  return text.replace(
-    regex,
-    `<mark>$1</mark>`
-  );
-}
-
-function toggleForm(){
-
-  const box =
-    document.getElementById("formBox");
-
-  box.classList.toggle("hidden");
-
-}
+document
+.getElementById("type")
+.addEventListener("change",toggleSolution);
 
 function toggleSolution(){
 
   const type =
-    document.getElementById("fType").value;
+  document.getElementById("type").value;
 
-  const solBox =
-    document.getElementById("solBox");
-
-  if(type === "incidencia"){
-
-    solBox.classList.remove("hidden");
-
-  }else{
-
-    solBox.classList.add("hidden");
-
-    document.getElementById("fSol").value = "";
-
-  }
+  document.getElementById(
+    "solutionGroup"
+  ).style.display =
+    type === "incidencia"
+    ? "block"
+    : "none";
 
 }
 
-document
-.getElementById("fType")
-.addEventListener("change", toggleSolution);
+function toggleForm(){
 
-async function loadEntries(){
+  const form =
+  document.getElementById("formBox");
 
-  const { data } =
-  await client
-  .from("entries")
-  .select("*")
-  .order("id", { ascending:false });
-
-  entries = data || [];
-
-  render();
-
-}
-
-async function saveEntry(){
-
-  const id =
-    document.getElementById("editId").value
-    || Date.now();
-
-  const title =
-    document.getElementById("fTitle")
-    .value
-    .trim();
-
-  const type =
-    document.getElementById("fType")
-    .value;
-
-  const desc =
-    document.getElementById("fDesc")
-    .value
-    .trim();
-
-  const sol =
-    document.getElementById("fSol")
-    .value
-    .trim();
-
-  const tags =
-    document.getElementById("fTags")
-    .value;
-
-  if(!title || !desc){
-
-    alert("Completa los campos");
-
-    return;
-
-  }
-
-  await client
-  .from("entries")
-  .upsert([{
-    id,
-    title,
-    type,
-    desc,
-    sol,
-    tags
-  }]);
-
-  await loadEntries();
-
-  clearForm();
-
-  document
-  .getElementById("formBox")
-  .classList.add("hidden");
+  form.style.display =
+    form.style.display === "none"
+    ? "block"
+    : "none";
 
 }
 
 function clearForm(){
 
-  document.getElementById("editId").value = "";
+  editingId = null;
 
-  document.getElementById("fTitle").value = "";
-
-  document.getElementById("fType").value =
-    "procedimiento";
-
-  document.getElementById("fDesc").value = "";
-
-  document.getElementById("fSol").value = "";
-
-  document.getElementById("fTags").value = "";
+  document.getElementById("title").value="";
+  document.getElementById("desc").value="";
+  document.getElementById("sol").value="";
+  document.getElementById("tags").value="";
+  document.getElementById("type").value="procedimiento";
 
   toggleSolution();
 
 }
 
-function editEntry(id){
+async function loadEntries(){
 
-  const e =
-    entries.find(x => x.id == id);
+  const { data,error } =
+  await supabaseClient
+  .from("entries")
+  .select("*")
+  .order("id",{ascending:false});
 
-  if(!e) return;
-
-  document.getElementById("editId").value =
-    e.id;
-
-  document.getElementById("fTitle").value =
-    e.title;
-
-  document.getElementById("fType").value =
-    e.type;
-
-  document.getElementById("fDesc").value =
-    e.desc;
-
-  document.getElementById("fSol").value =
-    e.sol;
-
-  document.getElementById("fTags").value =
-    e.tags;
-
-  toggleSolution();
-
-  document
-  .getElementById("formBox")
-  .classList.remove("hidden");
-
-}
-
-async function deleteEntry(id){
-
-  if(confirm("¿Eliminar entrada?")){
-
-    await client
-    .from("entries")
-    .delete()
-    .eq("id", id);
-
-    await loadEntries();
-
+  if(error){
+    console.error(error);
+    return;
   }
+
+  entries = data || [];
+
+  updateStats();
+
+  render();
+
+}
+
+function updateStats(){
+
+  document.getElementById(
+    "totalEntries"
+  ).innerText =
+    entries.length;
+
+  document.getElementById(
+    "totalIncidents"
+  ).innerText =
+    entries.filter(
+      e => e.type === "incidencia"
+    ).length;
+
+  document.getElementById(
+    "totalProcedures"
+  ).innerText =
+    entries.filter(
+      e =>
+        e.type === "procedimiento"
+        || e.type === "documentacion"
+        || e.type === "taller"
+    ).length;
+
+}
+
+function highlight(text,query){
+
+  if(!query) return text;
+
+  const regex =
+  new RegExp(`(${query})`,"gi");
+
+  return text.replace(
+    regex,
+    `<mark>$1</mark>`
+  );
+
+}
+
+function formatContent(text){
+
+  if(!text) return "";
+
+  const sections = text.split("🔹");
+
+  return sections.map(section => {
+
+    if(section.trim()==="") return "";
+
+    const lines =
+    section.trim().split("\n");
+
+    const title =
+    lines[0];
+
+    const items =
+    lines.slice(1);
+
+    return `
+      <div class="content-section">
+
+        <strong>${title}</strong>
+
+        <ul>
+          ${items.map(item => `
+            <li>${item}</li>
+          `).join("")}
+        </ul>
+
+      </div>
+    `;
+
+  }).join("");
 
 }
 
 function render(){
 
   const q =
-    document.getElementById("search")
-    .value
-    .toLowerCase();
+  document
+  .getElementById("search")
+  .value
+  .toLowerCase();
 
   const filter =
-    document.getElementById("filterType")
-    .value;
+  document
+  .getElementById("filter")
+  .value;
 
-  const filtered =
-    entries.filter(e => {
+  let filtered =
+  entries.filter(e => {
 
-      const match =
-
-        (e.title || "")
-        .toLowerCase()
-        .includes(q)
-
-        ||
-
-        (e.desc || "")
-        .toLowerCase()
-        .includes(q)
-
-        ||
-
+    const matchText =
+      (
+        e.title +
+        e.desc +
+        (e.sol || "") +
         (e.tags || "")
-        .toLowerCase()
-        .includes(q)
+      )
+      .toLowerCase()
+      .includes(q);
 
-        ||
+    const matchType =
+      filter === ""
+        ? true
+        : e.type === filter;
 
-        (e.sol || "")
-        .toLowerCase()
-        .includes(q);
+    return matchText && matchType;
 
-      return match &&
-      (!filter || e.type === filter);
+  });
 
-    });
+  const html =
+  filtered.map(e => `
 
-  document.getElementById("results").innerHTML =
+    <div class="result">
 
-    filtered.map(e => `
+      <h3>
+        ${highlight(e.title,q)}
+      </h3>
 
-      <div class="result">
+      <div class="badge">
+        ${e.type}
+      </div>
 
-        <h3>
-          ${highlight(e.title || "", q)}
-        </h3>
+      <div class="content-block">
 
-        <div>
-
-          <span class="tag">
-            ${e.type}
-          </span>
-
-        </div>
-
-        <p>
-          ${highlight(e.desc || "", q)}
-        </p>
-
-        ${
-          e.type === "incidencia"
-          &&
-          e.sol
-
-          ?
-
-          `
-          <div class="solution">
-
-            <strong>Solución:</strong>
-
-            <br><br>
-
-            ${highlight(e.sol || "", q)}
-
-          </div>
-          `
-
-          :
-
-          ""
-        }
-
-        <div style="margin-top:12px;">
-
-          ${
-            highlight(
-              (e.tags || "")
-              .split(",")
-              .map(t => `#${t.trim()}`)
-              .join(" "),
-              q
-            )
-          }
-
-        </div>
-
-        <div class="actions">
-
-          <button
-            class="btn-secondary"
-            onclick="editEntry(${e.id})"
-          >
-            Editar
-          </button>
-
-          <button
-            class="btn-danger"
-            onclick="deleteEntry(${e.id})"
-          >
-            Eliminar
-          </button>
-
-        </div>
+        ${formatContent(
+          highlight(e.desc || "", q)
+        )}
 
       </div>
 
-    `).join("");
+      ${
+        e.type === "incidencia"
+        && e.sol
+        ?
+        `
+        <p>
+          <strong>Solución:</strong><br><br>
+          ${highlight(e.sol,q)}
+        </p>
+        `
+        :
+        ""
+      }
 
-  updateStats();
+      <div class="tags">
+        ${highlight(e.tags || "",q)}
+      </div>
+
+      <div class="result-actions">
+
+        <button
+          class="btn-secondary"
+          onclick="edit(${e.id})"
+        >
+          Editar
+        </button>
+
+        <button
+          class="btn-danger"
+          onclick="del(${e.id})"
+        >
+          Eliminar
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+  document.getElementById(
+    "results"
+  ).innerHTML = html;
 
 }
 
-function updateStats(){
+async function saveEntry(){
 
-  document.getElementById("totalEntries")
-  .innerText =
-    entries.length;
+  const title =
+  document.getElementById("title").value;
 
-  document.getElementById("totalIncidents")
-  .innerText =
-    entries.filter(
-      e => e.type === "incidencia"
-    ).length;
+  const desc =
+  document.getElementById("desc").value;
 
-  document.getElementById("totalProcedures")
-  .innerText =
-    entries.filter(
-      e => e.type === "procedimiento"
-    ).length;
+  const sol =
+  document.getElementById("sol").value;
+
+  const type =
+  document.getElementById("type").value;
+
+  const tags =
+  document.getElementById("tags").value;
+
+  if(!title || !desc){
+    alert("Completa los campos");
+    return;
+  }
+
+  if(editingId){
+
+    await supabaseClient
+    .from("entries")
+    .update({
+      title,
+      desc,
+      sol,
+      type,
+      tags
+    })
+    .eq("id",editingId);
+
+  }else{
+
+    await supabaseClient
+    .from("entries")
+    .insert([{
+      title,
+      desc,
+      sol,
+      type,
+      tags
+    }]);
+
+  }
+
+  clearForm();
+
+  toggleForm();
+
+  loadEntries();
 
 }
 
-document
-.getElementById("search")
-.addEventListener("input", render);
+function edit(id){
 
-document
-.getElementById("filterType")
-.addEventListener("change", render);
+  const e =
+  entries.find(x => x.id === id);
 
-toggleSolution();
+  if(!e) return;
+
+  editingId = id;
+
+  document.getElementById(
+    "title"
+  ).value = e.title;
+
+  document.getElementById(
+    "desc"
+  ).value = e.desc;
+
+  document.getElementById(
+    "sol"
+  ).value = e.sol || "";
+
+  document.getElementById(
+    "type"
+  ).value = e.type;
+
+  document.getElementById(
+    "tags"
+  ).value = e.tags || "";
+
+  toggleSolution();
+
+  document.getElementById(
+    "formBox"
+  ).style.display = "block";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+async function del(id){
+
+  if(!confirm("Eliminar entrada?"))
+    return;
+
+  await supabaseClient
+  .from("entries")
+  .delete()
+  .eq("id",id);
+
+  loadEntries();
+
+}
 
 loadEntries();
 
